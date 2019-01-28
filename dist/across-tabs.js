@@ -16,7 +16,7 @@
 		exports["AcrossTabs"] = factory();
 	else
 		root["AcrossTabs"] = factory();
-})(this, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -904,7 +904,7 @@ var Tab = function () {
     _classCallCheck(this, Tab);
 
     // Set name of Parent tab if not already defined
-    window.name = window.name || 'PARENT_TAB';
+    window.name = window.name || _uuid2.default.generate();
   }
 
   _createClass(Tab, [{
@@ -918,10 +918,10 @@ var Tab = function () {
     value: function create(config) {
       config = config || {};
       _extends(this, config);
-      this.id = _uuid2.default.generate() || _tab2.default.tabs.length + 1;
+      this.id = _uuid2.default.generate();
       this.status = 'open';
       // Refere https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features for WindowFeatures
-      this.ref = window.open(this.url, '_blank', config.windowFeatures);
+      this.ref = window.open(this.url, this.windowName || '_blank', config.windowFeatures);
 
       _dom2.default.disable('data-tab-opener');
 
@@ -1450,13 +1450,11 @@ var Child = function () {
         window.removeEventListener('message', function (evt) {
           return _this.onCommunication(evt);
         });
-      }
-
-      /**
-       * When Parent sends an Acknowledgement to the Child's request of setting up a communication channel
-       * along with the tab's identity i.e. id, name and it's parent(itself) to the child tab.
-      */
-      if (data.indexOf(_PostMessageEventNamesEnum2.default.HANDSHAKE_WITH_PARENT) > -1) {
+      } else if (data.indexOf(_PostMessageEventNamesEnum2.default.HANDSHAKE_WITH_PARENT) > -1) {
+        /**
+         * When Parent sends an Acknowledgement to the Child's request of setting up a communication channel
+         * along with the tab's identity i.e. id, name and it's parent(itself) to the child tab.
+        */
         var msg = void 0;
 
         dataReceived = data.split(_PostMessageEventNamesEnum2.default.HANDSHAKE_WITH_PARENT)[1];
@@ -1474,10 +1472,8 @@ var Child = function () {
         if (this.config.onInitialize) {
           this.config.onInitialize();
         }
-      }
-
-      // Whenever Parent tab communicates once the communication channel is established
-      if (data.indexOf(_PostMessageEventNamesEnum2.default.PARENT_COMMUNICATED) > -1) {
+      } else if (data.indexOf(_PostMessageEventNamesEnum2.default.PARENT_COMMUNICATED) > -1) {
+        // Whenever Parent tab communicates once the communication channel is established
         dataReceived = data.split(_PostMessageEventNamesEnum2.default.PARENT_COMMUNICATED)[1];
 
         try {
