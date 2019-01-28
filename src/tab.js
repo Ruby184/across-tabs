@@ -9,7 +9,7 @@ class Tab {
    */
   constructor() {
     // Set name of Parent tab if not already defined
-    window.name = window.name || 'PARENT_TAB';
+    window.name = window.name || UUID.generate();
   };
   /**
    * Open a new tab
@@ -19,13 +19,14 @@ class Tab {
   create(config) {
     config = config || {};
     Object.assign(this, config);
-    this.id = UUID.generate() || (tabUtils.tabs.length + 1);
+    this.id = UUID.generate();
     this.status = 'open';
     // Refere https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features for WindowFeatures
     this.ref = window.open(
       this.url,
-      '_blank',
-      config.windowFeatures);
+      this.windowName || '_blank',
+      config.windowFeatures
+    );
 
     domUtils.disable('data-tab-opener');
 

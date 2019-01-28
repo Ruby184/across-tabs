@@ -143,7 +143,7 @@ class Child {
      * When Parent sends an Acknowledgement to the Child's request of setting up a communication channel
      * along with the tab's identity i.e. id, name and it's parent(itself) to the child tab.
     */
-    if (data.indexOf(PostMessageEventNamesEnum.HANDSHAKE_WITH_PARENT) > -1) {
+    else if (data.indexOf(PostMessageEventNamesEnum.HANDSHAKE_WITH_PARENT) > -1) {
       let msg;
 
       dataReceived = data.split(PostMessageEventNamesEnum.HANDSHAKE_WITH_PARENT)[1];
@@ -164,7 +164,7 @@ class Child {
     }
 
     // Whenever Parent tab communicates once the communication channel is established
-    if (data.indexOf(PostMessageEventNamesEnum.PARENT_COMMUNICATED) > -1) {
+    else if (data.indexOf(PostMessageEventNamesEnum.PARENT_COMMUNICATED) > -1) {
       dataReceived = data.split(PostMessageEventNamesEnum.PARENT_COMMUNICATED)[1];
 
       try {
